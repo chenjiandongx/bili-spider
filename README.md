@@ -77,7 +77,7 @@ with futures.ThreadPoolExecutor(32) as executor:
 
 ![sql-reply](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-reply.png)
 
-各种花样查询任君选择！！
+各种花样查询任君选择！！视频的链接为 https://www.bilibili.com/video/av + v_aid
 
 #### 详细代码请移步至 [bili.py](https://github.com/chenjiandongx/bili-spider/blob/master/bili.py)
 
