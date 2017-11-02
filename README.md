@@ -2,6 +2,8 @@
 
 B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不过 **纸上得来终觉浅，绝知此事要躬行**，我码故我在。
 
+### 准备工作
+
 首先打开 B 站，随便在首页找一个视频点击进去。常规操作，打开开发者工具。这次是目标是通过爬取 B 站提供的 api 来获取视频信息，不去解析网页，解析网页的速度太慢了而且容易被封 ip。
 
 勾选 JS 选项，F5 刷新
@@ -16,9 +18,11 @@ B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不
 
 ![bili-2](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-2.png)
 
+### 开码
+
 好了，到这里代码就可以码起来了，通过 request 不断的迭代获取数据，为了让爬虫更高效，可以利用多线程。
 
-核心代码
+#### 核心代码
 ```
 result = []
 req = requests.get(url, headers=headers, timeout=6).json()
@@ -40,7 +44,7 @@ except:
     pass
 ```
 
-迭代的链接大概是这样的
+#### 迭代的链接大概是这样的
 ```
 urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in range(10000)]
 ```
@@ -51,23 +55,26 @@ urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in ra
 
 至于爬取后要怎么处理就看自己爱好了，我是先保存为 csv 文件，然后再汇总插入到数据库。
 
-数据库表
+#### 数据库表
 
 ![sql-desc](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-desc.png)
 
 由于这些内容是我在几个月前爬取的，所以数据其实有些滞后了。
 
-数据总量
+#### 数据总量
 
 ![sql-sum](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-sum.png)
 
-查询播放量前十的视频
+#### 查询播放量前十的视频
 
 ![sql-view](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-view.png)
 
-查询回复量前十的视频
+#### 查询回复量前十的视频
+
 ![sql-reply](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-reply.png)
 
 各种花样查询任君选择！！
+
+#### 详细代码请移步至 [bili.py](https://github.com/chenjiandongx/bili-spider/blob/master/bili.py)
 
 对数据感兴趣的话可以邮箱联系我，可以打包发送给你。
