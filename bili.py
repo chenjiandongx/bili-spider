@@ -24,7 +24,7 @@ def run(url):
     """
     global total
     req = requests.get(url, headers=headers, timeout=6).json()
-    time.sleep(0.6)     # 延迟，避免太快 ip 被封
+    time.sleep(0.5)     # 延迟，避免太快 ip 被封
     try:
         data = req['data']
         video = Video(
