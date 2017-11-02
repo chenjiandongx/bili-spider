@@ -20,9 +20,11 @@ lock = threading.Lock()
 
 
 def run(url):
+    """ 启动爬虫
+    """
     global total
     req = requests.get(url, headers=headers, timeout=6).json()
-    time.sleep(0.25)
+    time.sleep(0.6)     # 延迟，避免太快 ip 被封
     try:
         data = req['data']
         video = Video(
@@ -43,6 +45,8 @@ def run(url):
 
 
 def save():
+    """ 将数据保存至本地
+    """
     with open("result.csv", "w+", encoding="utf-8") as f:
         f_csv = csv.writer(f)
         f_csv.writerow(header)
@@ -50,7 +54,8 @@ def save():
 
 
 if __name__ == "__main__":
-    urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in range(500000)]
-    with futures.ThreadPoolExecutor(8) as executor:
+    urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i)
+            for i in range(10000)]
+    with futures.ThreadPoolExecutor(32) as executor:
         executor.map(run, urls)
     save()
