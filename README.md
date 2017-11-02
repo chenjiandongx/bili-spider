@@ -6,15 +6,15 @@ B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不
 
 勾选 JS 选项，F5 刷新
 
-![bili-0]()
+![bili-0](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-0.png)
 
 找到了 api 的地址
 
-![bili-1]()
+![bili-1](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-1.png)
 
 复制下来，去除没必要的内容，得到 https://api.bilibili.com/x/web-interface/archive/stat?aid=15906633 ，用浏览器打开，会得到如下的 json 数据
 
-![bili-2]()
+![bili-2](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-2.png)
 
 好了，到这里代码就可以码起来了，通过 request 不断的迭代获取数据，为了让爬虫更高效，可以利用多线程。
 
@@ -47,26 +47,26 @@ urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in ra
 
 运行的效果大概是这样的，数字是已经已经爬取了多少条链接，其实完全可以在一天或者两天内就把全站信息爬完的。
 
-![bili-3]()
+![bili-3](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-3.gif)
 
 至于爬取后要怎么处理就看自己爱好了，我是先保存为 csv 文件，然后再汇总插入到数据库。
 
 数据库表
 
-![sql-desc]
+![sql-desc](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-desc.png)
 
 由于这些内容是我在几个月前爬取的，所以数据其实有些滞后了。
 
 数据总量
 
-![sql-sum]()
+![sql-sum](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-sum.png)
 
 查询播放量前十的视频
 
-![sql-view]()
+![sql-view](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-view.png)
 
 查询回复量前十的视频
-![sql-reply]()
+![sql-reply](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-reply.png)
 
 各种花样查询任君选择！！
 
