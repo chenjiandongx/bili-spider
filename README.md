@@ -18,7 +18,7 @@ B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不
 
 ![bili-2](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-2.png)
 
-### 开码
+### 动手写码
 
 好了，到这里代码就可以码起来了，通过 request 不断的迭代获取数据，为了让爬虫更高效，可以利用多线程。
 
@@ -44,10 +44,14 @@ except:
     pass
 ```
 
-#### 迭代的链接大概是这样的
+#### 迭代爬取
 ```
 urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in range(10000)]
+with futures.ThreadPoolExecutor(32) as executor:
+    executor.map(run, urls)
 ```
+
+整个项目的最主要部分的代码也就是 20 行左右，挺简洁的。
 
 运行的效果大概是这样的，数字是已经已经爬取了多少条链接，其实完全可以在一天或者两天内就把全站信息爬完的。
 
@@ -77,4 +81,4 @@ urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in ra
 
 #### 详细代码请移步至 [bili.py](https://github.com/chenjiandongx/bili-spider/blob/master/bili.py)
 
-对数据感兴趣的话可以邮箱联系我，可以打包发送给你。
+对数据感兴趣的话可以邮箱联系我，可以打包赠与。
