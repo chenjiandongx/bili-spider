@@ -47,17 +47,21 @@ except:
 #### 迭代爬取
 ```
 urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in range(10000)]
-with futures.ThreadPoolExecutor(32) as executor:
+with futures.ThreadPoolExecutor(32) as executor:    # 多线程
     executor.map(run, urls)
 ```
 
-整个项目的最主要部分的代码也就是 20 行左右，挺简洁的。
+不要一次性爬取全部链接，我是利用两个进程，这样就是多进程+多线程了，一个进程一次大概爬取 50w 条数据。100w 条数据的话大概一个多小时吧。分多次爬取，分别将数据保存为不同的文件名，最后再汇总。
 
 运行的效果大概是这样的，数字是已经已经爬取了多少条链接，其实完全可以在一天或者两天内就把全站信息爬完的。
 
 ![bili-3](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-3.gif)
 
 至于爬取后要怎么处理就看自己爱好了，我是先保存为 csv 文件，然后再汇总插入到数据库。
+
+汇总的 csv 文件
+
+![bili-4](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-4.png)
 
 #### 数据库表
 
