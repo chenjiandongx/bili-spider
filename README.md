@@ -87,4 +87,4 @@ with futures.ThreadPoolExecutor(32) as executor:    # 多线程
 
 #### 详细代码请移步至 [bili.py](https://github.com/chenjiandongx/bili-spider/blob/master/bili.py)
 
-对数据感兴趣的话可以邮箱联系我，可以打包赠与。
+数据在这里 [bili.zip](https://github.com/chenjiandongx/bili-spider/blob/master/data/bili.zip)
