@@ -1,8 +1,12 @@
 import threading
-from functools import namedtuple
 from concurrent import futures
 import time
 import csv
+try:
+    from functools import namedtuple
+except ImportError:
+    from collections import namedtuple
+
 
 import requests
 
@@ -11,8 +15,8 @@ header = ["aid", "view", "danmaku", "reply", "favorite", "coin", "share"]
 Video = namedtuple('Video', header)
 headers = {
     'X-Requested-With': 'XMLHttpRequest',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/56.0.2924.87 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36'
+                  '(KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
 }
 total = 1
 result = []
