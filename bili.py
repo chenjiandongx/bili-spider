@@ -58,8 +58,10 @@ def save():
 
 
 if __name__ == "__main__":
-    urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i)
-            for i in range(10000)]
-    with futures.ThreadPoolExecutor(32) as executor:
-        executor.map(run, urls)
+    for i in range(0,1981):
+        begin=10000*i
+        urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
+            for j in range(begin,begin+10000)]
+        with futures.ThreadPoolExecutor(32) as executor:
+            executor.map(run, urls)
     save()
