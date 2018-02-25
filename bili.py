@@ -1,18 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Feb 24 10:16:15 2018
+@author: peter
+"""
+
 import threading
-from concurrent import futures
 import time
-import csv
-try:
-    from functools import namedtuple
-except ImportError:
-    from collections import namedtuple
-
-
+import sqlite3
 import requests
+from concurrent import futures
 
-
-header = ["aid", "view", "danmaku", "reply", "favorite", "coin", "share"]
-Video = namedtuple('Video', header)
 headers = {
     'X-Requested-With': 'XMLHttpRequest',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36'
@@ -21,17 +18,17 @@ headers = {
 total = 1
 result = []
 lock = threading.Lock()
-
+flag=0
 
 def run(url):
-    """ 启动爬虫
-    """
+    # 启动爬虫
     global total
     req = requests.get(url, headers=headers, timeout=6).json()
-    time.sleep(0.5)     # 延迟，避免太快 ip 被封
+    time.sleep(0.4)     # 延迟，避免太快 ip 被封
     try:
         data = req['data']
-        video = Video(
+        video = (
+            total,
             data['aid'],        # 视频编号
             data['view'],       # 播放量
             data['danmaku'],    # 弹幕数
@@ -42,26 +39,58 @@ def run(url):
         )
         with lock:
             result.append(video)
-            print(total)
+            if total %250==0 and flag==0:
+                print(total)
             total += 1
     except:
         pass
 
+def create():
+    global conn
+    conn=sqlite3.connect('data.db')
+    conn.execute('''create table if not exists data
+    (id int prinmary key autocrement,
+    aid int,
+    view int ,
+    danmaku int,
+    reply int,
+    favorite int,
+    coin int,
+    share int
+    ) ;''')
+    conn.execute("""insert into data
+    (id,aid,view,danmaku,reply,favorite,coin,share)    
+    values(0,0,0,0,0,0,0,0);
+    """)
 
 def save():
-    """ 将数据保存至本地
-    """
-    with open("result.csv", "w+", encoding="utf-8") as f:
-        f_csv = csv.writer(f)
-        f_csv.writerow(header)
-        f_csv.writerows(result)
+    # 将数据保存至本地
+    global result,conn,flag
+    command="insert into data \
+        (id,aid,view,danmaku,reply,favorite,coin,share)    \
+        values(?,?,?,?,?,?,?,?);"
+    for row in result:
+        try:
+            conn.execute(command,row)
+        except:
+            conn.rollback()
+            print(error!!)
+            flag=1
+            pass
+#    print(conn.execute("""
+#    select * from data order by id""").fetchall())
+    conn.commit()
+    result=[]
 
 
 if __name__ == "__main__":
-    for i in range(0,1981):
+    conn=None
+    create()
+    for i in range(0,1981): 
         begin=10000*i
         urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
-            for j in range(begin,begin+10000)]
+        for j in range(begin,begin+10000)]
         with futures.ThreadPoolExecutor(32) as executor:
-            executor.map(run, urls)
-    save()
+                executor.map(run, urls)
+        save()
+    conn.close()
