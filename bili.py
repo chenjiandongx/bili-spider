@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Feb 24 10:16:15 2018
-@author: peter
-"""
-
+#使用Python3
 import threading
 import time
 import sqlite3
@@ -18,7 +14,8 @@ headers = {
 total = 1
 result = []
 lock = threading.Lock()
-flag=0
+flag = None
+conn = None
 
 def run(url):
     # 启动爬虫
@@ -39,58 +36,54 @@ def run(url):
         )
         with lock:
             result.append(video)
-            if total %250==0 and flag==0:
+            if total %250 == 0:
                 print(total)
             total += 1
     except:
         pass
 
 def create():
+    #创建数据库
     global conn
-    conn=sqlite3.connect('data.db')
-    conn.execute('''create table if not exists data
-    (id int prinmary key autocrement,
-    aid int,
-    view int ,
-    danmaku int,
-    reply int,
-    favorite int,
-    coin int,
-    share int
-    ) ;''')
+    conn = sqlite3.connect('data.db')
+    conn.execute("""create table if not exists data
+                    (id int prinmary key autocrement,
+                    aid int,
+                    view int,
+                    danmaku int,
+                    reply int,
+                    favorite int,
+                    coin int,
+                    share int)""")
     conn.execute("""insert into data
-    (id,aid,view,danmaku,reply,favorite,coin,share)    
-    values(0,0,0,0,0,0,0,0);
-    """)
+                    (id,aid,view,danmaku,reply,favorite,coin,share)    
+                    values(0,0,0,0,0,0,0,0)""")
 
 def save():
     # 将数据保存至本地
-    global result,conn,flag
-    command="insert into data \
-        (id,aid,view,danmaku,reply,favorite,coin,share)    \
-        values(?,?,?,?,?,?,?,?);"
+    global result,conn,flag,total
+    command = "insert into data \
+             values(?,?,?,?,?,?,?,?);"
     for row in result:
         try:
             conn.execute(command,row)
         except:
             conn.rollback()
-            print(error!!)
-            flag=1
+            flag = "error has occurred when total is "+str(total)
             pass
-#    print(conn.execute("""
-#    select * from data order by id""").fetchall())
     conn.commit()
-    result=[]
+    result = []
 
 
 if __name__ == "__main__":
-    conn=None
     create()
     for i in range(0,1981): 
-        begin=10000*i
+        begin = 10000*i
         urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
         for j in range(begin,begin+10000)]
         with futures.ThreadPoolExecutor(32) as executor:
                 executor.map(run, urls)
         save()
+    if flag != None:
+        print(flag)
     conn.close()
