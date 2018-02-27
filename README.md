@@ -31,7 +31,8 @@ req = requests.get(url, headers=headers, timeout=6).json()
 time.sleep(0.6)     # 延迟，避免太快 ip 被封
 try:
     data = req['data']
-    video = Video(
+    video = (
+        total,
         data['aid'],        # 视频编号
         data['view'],       # 播放量
         data['danmaku'],    # 弹幕数
@@ -42,13 +43,17 @@ try:
     )
     with lock:
         result.append(video)
+        if total % 100 == 0:
+            print(total)
+        total += 1
 except:
     pass
 ```
 
 #### 迭代爬取
 ```
-urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i) for i in range(10000)]
+urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(i)
+        for i in range(10000)]
 with futures.ThreadPoolExecutor(32) as executor:    # 多线程
     executor.map(run, urls)
 ```
