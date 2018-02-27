@@ -69,7 +69,7 @@ def save_db():
             conn.execute(command, row)
         except:
             conn.rollback()
-            error_msg.append("在爬取总数为： " + str(total) + " 时出现出错")
+            error_msg.append("保存 aid 为: {} 时出现出错".format(row[1]))
     conn.commit()
     result = []
 
