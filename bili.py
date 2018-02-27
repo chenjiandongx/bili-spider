@@ -77,7 +77,7 @@ def save_db():
 if __name__ == "__main__":
     create_db()
     print("启动爬虫，开始爬取数据")
-    for i in range(0, 1981):
+    for i in range(0, 2014):
         begin = 10000 * i
         urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
                 for j in range(begin, begin + 10000)]
