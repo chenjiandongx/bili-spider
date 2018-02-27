@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-#使用Python3
 import threading
 import time
 import sqlite3
-import requests
 from concurrent import futures
+
+import requests
 
 headers = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -14,8 +14,10 @@ headers = {
 total = 1
 result = []
 lock = threading.Lock()
-flag = None
+
 conn = None
+error_msg = []
+
 
 def run(url):
     # 启动爬虫
@@ -36,14 +38,15 @@ def run(url):
         )
         with lock:
             result.append(video)
-            if total %250 == 0:
+            if total % 100 == 0:
                 print(total)
             total += 1
     except:
         pass
 
-def create():
-    #创建数据库
+
+def create_db():
+    # 创建数据库
     global conn
     conn = sqlite3.connect('data.db')
     conn.execute("""create table if not exists data
@@ -55,35 +58,32 @@ def create():
                     favorite int,
                     coin int,
                     share int)""")
-    conn.execute("""insert into data
-                    (id,aid,view,danmaku,reply,favorite,coin,share)    
-                    values(0,0,0,0,0,0,0,0)""")
 
-def save():
+
+def save_db():
     # 将数据保存至本地
-    global result,conn,flag,total
-    command = "insert into data \
-             values(?,?,?,?,?,?,?,?);"
+    global result, conn, error_msg, total
+    command = "insert into data values(?, ?, ?, ?, ?, ?, ?, ?);"
     for row in result:
         try:
-            conn.execute(command,row)
+            conn.execute(command, row)
         except:
             conn.rollback()
-            flag = "error has occurred when total is "+str(total)
-            pass
+            error_msg.append("在爬取总数为： " + str(total) + " 时出现出错")
     conn.commit()
     result = []
 
 
 if __name__ == "__main__":
-    create()
-    for i in range(0,1981): 
-        begin = 10000*i
+    create_db()
+    print("启动爬虫，开始爬取数据")
+    for i in range(0, 1981):
+        begin = 10000 * i
         urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
-        for j in range(begin,begin+10000)]
+                for j in range(begin, begin + 10000)]
         with futures.ThreadPoolExecutor(32) as executor:
-                executor.map(run, urls)
-        save()
-    if flag != None:
-        print(flag)
+            executor.map(run, urls)
+        save_db()
+    for msg in error_msg:
+        print(msg)
     conn.close()
