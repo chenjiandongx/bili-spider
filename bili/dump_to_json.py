@@ -22,8 +22,14 @@ def get_video_info(order_by):
 
 def get_json(videos):
     for video in videos:
-        d = {cols[i]: video[i] for i in range(8)}
-        d.update(v_href="https://www.bilibili.com/video/av{}".format(video[0]))
+        d ={}
+        for i in range(8):
+            if i not in (0, 7):
+                d.update({cols[i]: format(video[i], ",")})
+            else:
+                d.update({cols[i]: video[i]})
+            d.update(
+                v_href="https://www.bilibili.com/video/av{}".format(video[0]))
         yield d
 
 
