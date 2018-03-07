@@ -1,6 +1,6 @@
 # B 站全站视频信息爬虫
 
-B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不过 **纸上得来终觉浅，绝知此事要躬行**，我码故我在。最终爬取到数据总量为 **760万** 条。
+B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不过 **纸上得来终觉浅，绝知此事要躬行**，我码故我在。最终爬取到数据总量为 **1100 万** 条。
 
 #### 开发环境为：Windows10 + python3
 
@@ -58,38 +58,6 @@ with futures.ThreadPoolExecutor(32) as executor:    # 多线程
     executor.map(run, urls)
 ```
 
-不要一次性爬取全部链接，我是利用两个进程，这样就是多进程+多线程了，一个进程一次大概爬取 50w 条数据。100w 条数据的话大概一个多小时吧。分多次爬取，分别将数据保存为不同的文件名，最后再汇总。
+爬取后数据存放进了 MySQL 数据库，总共爬取到了 1100w+ 条数据
 
-运行的效果大概是这样的，数字是已经已经爬取了多少条链接，其实完全可以在一天或者两天内就把全站信息爬完的。
-
-![bili-3](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-3.gif)
-
-至于爬取后要怎么处理就看自己爱好了，我是先保存为 csv 文件，然后再汇总插入到数据库。
-
-汇总的 csv 文件
-
-![bili-4](https://github.com/chenjiandongx/bili-spider/blob/master/images/bili-4.png)
-
-#### 数据库表
-
-![sql-desc](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-desc.png)
-
-由于这些内容是我在几个月前爬取的，所以数据其实有些滞后了。
-
-#### 数据总量
-
-![sql-sum](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-sum.png)
-
-#### 查询播放量前十的视频
-
-![sql-view](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-view.png)
-
-#### 查询回复量前十的视频
-
-![sql-reply](https://github.com/chenjiandongx/bili-spider/blob/master/images/sql-reply.png)
-
-各种花样查询任君选择！！视频的链接为 https://www.bilibili.com/video/av + v_aid
-
-#### 详细代码请移步至 [bili.py](https://github.com/chenjiandongx/bili-spider/blob/master/bili.py)
-
-数据在这里 [bili.zip](https://github.com/chenjiandongx/bili-spider/blob/master/data/bili.zip)
+前 750w 条数据在这里 [bili.zip](https://github.com/chenjiandongx/bili-spider/blob/master/data/bili.zip)
