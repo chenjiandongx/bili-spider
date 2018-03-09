@@ -1,3 +1,16 @@
+import logging
+
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger('monitor')
+logger.setLevel(logging.INFO)
+
+fh = logging.FileHandler('monitor.log')
+fh.setLevel(logging.INFO)
+
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 
 connect = {
     "host": "localhost",

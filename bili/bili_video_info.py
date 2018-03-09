@@ -8,7 +8,7 @@ from concurrent import futures
 import pymysql
 import requests
 
-from bili import headers, connect
+from bili import headers, connect, logger
 
 conn = pymysql.connect(**connect)
 cur = conn.cursor()
@@ -41,6 +41,7 @@ def run(url):
                 result.append(video)
                 if total % 100 == 0:
                     print(total)
+                    logger.info(total)
                 total += 1
     except:
         pass
