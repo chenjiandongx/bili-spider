@@ -1,6 +1,6 @@
 # B 站全站视频信息爬虫
 
-B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不过 **纸上得来终觉浅，绝知此事要躬行**，我码故我在。最终爬取到数据总量为 **1100 万** 条。
+B 站我想大家都熟悉吧，其实 B 站的爬虫网上一搜一大堆。不过 **纸上得来终觉浅，绝知此事要躬行**，我码故我在。最终爬取到数据总量为 **1300 万** 条。
 
 #### 开发环境为：Windows10 + python3
 
@@ -58,6 +58,6 @@ with futures.ThreadPoolExecutor(32) as executor:    # 多线程
     executor.map(run, urls)
 ```
 
-爬取后数据存放进了 MySQL 数据库，总共爬取到了 1100w+ 条数据
+爬取后数据存放进了 MySQL 数据库，总共爬取到了 1300w+ 条数据
 
 前 750w 条数据在这里 [bili.zip](https://github.com/chenjiandongx/bili-spider/blob/master/data/bili.zip)
