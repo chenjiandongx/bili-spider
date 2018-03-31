@@ -50,7 +50,7 @@ def run(url):
 def create_db():
     # 创建数据库
     global cur
-    cur.execute("""create table if not exists bili_info
+    cur.execute("""create table if not exists bili_video
                    (v_aid int primary key,
                     v_view int,
                     v_danmaku int,
@@ -64,7 +64,7 @@ def create_db():
 def save_db():
     # 将数据保存至本地
     global result, cur, conn, total
-    sql = "insert into bili_info values(%s, %s, %s, %s, %s, %s, %s, %s);"
+    sql = "insert into bili_video values(%s, %s, %s, %s, %s, %s, %s, %s);"
     for row in result:
         try:
             cur.execute(sql, row)

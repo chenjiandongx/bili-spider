@@ -14,7 +14,7 @@ cur = conn.cursor()
 
 def get_video_info(order_by):
     global cur
-    sql = "select * from bili_info order by {} desc limit 100".format(order_by)
+    sql = "select * from bili_video order by {} desc limit 100".format(order_by)
     cur.execute(sql)
     for video in cur.fetchall():
         yield video

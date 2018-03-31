@@ -18,7 +18,7 @@ lock = threading.Lock()
 
 def get_video_aid(col):
     global cur
-    sql = "select v_aid from bili_info order by {} desc limit 100".format(col)
+    sql = "select v_aid from bili_video order by {} desc limit 100".format(col)
     cur.execute(sql)
     for _aid in cur.fetchall():
         yield _aid[0]
@@ -37,7 +37,7 @@ def get_video_name(aids):
 
 def update_db_video_name(names):
     global cur, conn
-    sql = "update bili_info set v_name = %s where v_aid = %s"
+    sql = "update bili_video set v_name = %s where v_aid = %s"
     for row in names:
         for v_aid, v_name in row.items():
             try:
