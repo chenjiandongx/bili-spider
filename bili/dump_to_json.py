@@ -22,14 +22,13 @@ def get_video_info(order_by):
 
 def get_json(videos):
     for video in videos:
-        d ={}
+        d = {}
         for i in range(8):
             if i not in (0, 7):
                 d.update({cols[i]: format(video[i], ",")})
             else:
                 d.update({cols[i]: video[i]})
-            d.update(
-                v_href="https://www.bilibili.com/video/av{}".format(video[0]))
+            d.update(v_href="https://www.bilibili.com/video/av{}".format(video[0]))
         yield d
 
 
@@ -41,6 +40,6 @@ def dump_json(data, filename):
 
 
 if __name__ == "__main__":
-    for col in cols[1: -1]:
+    for col in cols[1:-1]:
         _data = get_json(get_video_info(col))
         dump_json(_data, col)

@@ -23,19 +23,19 @@ def run(url):
     # 启动爬虫
     global total
     req = requests.get(url, headers=headers, timeout=6).json()
-    time.sleep(0.5)     # 延迟，避免太快 ip 被封
+    time.sleep(0.5)  # 延迟，避免太快 ip 被封
     try:
-        data = req['data']
-        if data['view'] != "--" and data['aid'] != 0:
+        data = req["data"]
+        if data["view"] != "--" and data["aid"] != 0:
             video = (
-                data['aid'],        # 视频编号
-                data['view'],       # 播放量
-                data['danmaku'],    # 弹幕数
-                data['reply'],      # 评论数
-                data['favorite'],   # 收藏数
-                data['coin'],       # 硬币数
-                data['share'],      # 分享数
-                ""                  # 视频名称（暂时为空）
+                data["aid"],  # 视频编号
+                data["view"],  # 播放量
+                data["danmaku"],  # 弹幕数
+                data["reply"],  # 评论数
+                data["favorite"],  # 收藏数
+                data["coin"],  # 硬币数
+                data["share"],  # 分享数
+                "",  # 视频名称（暂时为空）
             )
             with lock:
                 result.append(video)
@@ -50,7 +50,8 @@ def run(url):
 def create_db():
     # 创建数据库
     global cur
-    cur.execute("""create table if not exists bili_video
+    cur.execute(
+        """create table if not exists bili_video
                    (v_aid int primary key,
                     v_view int,
                     v_danmaku int,
@@ -58,7 +59,8 @@ def create_db():
                     v_favorite int,
                     v_coin int,
                     v_share int,
-                    v_name text)""")
+                    v_name text)"""
+    )
 
 
 def save_db():
@@ -79,8 +81,10 @@ if __name__ == "__main__":
     print("启动爬虫，开始爬取数据")
     for i in range(1, 2015):
         begin = 10000 * i
-        urls = ["http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
-                for j in range(begin, begin + 10000)]
+        urls = [
+            "http://api.bilibili.com/archive_stat/stat?aid={}".format(j)
+            for j in range(begin, begin + 10000)
+        ]
         with futures.ThreadPoolExecutor(64) as executor:
             executor.map(run, urls)
         save_db()
