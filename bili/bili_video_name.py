@@ -31,7 +31,7 @@ def get_video_name(aids):
             req = requests.get(url.format(i), headers=headers).text
             q = pyquery.PyQuery(req)
             yield {i: q("h1[title]").text()}
-        except:
+        except Exception as e:
             pass
 
 
@@ -48,7 +48,7 @@ def update_db_video_name(names):
 
 
 if __name__ == "__main__":
-    for _col in cols[1: -1]:
+    for _col in cols[1:-1]:
         video_aids = get_video_aid(_col)
         _names = get_video_name(video_aids)
         update_db_video_name(_names)
