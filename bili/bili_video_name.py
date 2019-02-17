@@ -31,7 +31,7 @@ def get_video_name(aids):
             req = requests.get(url.format(i), headers=headers).text
             q = pyquery.PyQuery(req)
             yield {i: q("h1[title]").text()}
-        except Exception as e:
+        except:
             pass
 
 
@@ -41,8 +41,10 @@ def update_db_video_name(names):
     for row in names:
         for v_aid, v_name in row.items():
             try:
+                print(v_aid, v_name)
                 cur.execute(sql, (v_name, v_aid))
-            except:
+            except Exception as e:
+                print(e)
                 conn.rollback()
         conn.commit()
 
